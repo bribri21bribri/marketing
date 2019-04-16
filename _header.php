@@ -15,26 +15,32 @@
   <script src="./js/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="./DataTables/datatables.js"></script>
   <script src="./DataTables/Buttons-1.5.6/js/dataTables.buttons.min.js"></script>
+  <script src="./DataTables/Buttons-1.5.6/js/buttons.print.js"></script>
+
   <script src="./js/bootstrap.bundle.js"></script>
   <script src="./js/H-confirm-alert.js"></script>
   <title>Document</title>
   <style>
-  body{
-            font-family: Arial, "微軟正黑體";
-        }
-        .white{
-            color: white;
-        }
-        .dark{
-            color: #4b4b4b;
-        }
-        .box{
-            width: 150px;
-            height: 150px;
-            margin: 10px;
-        }
-  .asterisk{
-    color:red;
+  body {
+    font-family: Arial, "微軟正黑體";
+  }
+
+  .white {
+    color: white;
+  }
+
+  .dark {
+    color: #4b4b4b;
+  }
+
+  .box {
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+  }
+
+  .asterisk {
+    color: red;
   }
   </style>
 

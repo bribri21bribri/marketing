@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . './_connectDB.php';
+include __DIR__ . '/_connectDB.php';
 try {
     $mem_sql = "SELECT * FROM member_level";
     $mem_stmt = $pdo->query($mem_sql);
@@ -39,19 +39,26 @@ include __DIR__ . './_navbar.php';
       <div class="col-md-10">
         <div class="alert alert-success" role="alert" style="display: none;" id="info_bar"></div>
       </div>
-      <div class="col-md-2">
+      <!-- <div class="col-md-2">
         <div class="dropdown open">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="coupon_list" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             列出Coupon
           </button>
-          <div class="dropdown-menu" aria-labelledby="coupon_list" id="fetch_option">
-            <button class="dropdown-item" href="#">列出所有Coupon</button>
-            <button class="dropdown-item" href="#" data-sql="WHERE `coupon_expire`>`created_at`">列出有效期限內coupon
-            </button>
-            <button class="dropdown-item" href="#" data-sql="WHERE `coupon_expire`<`created_at`">列出已過期coupon
-            </button>
-          </div>
+          <select class="dropdown-menu" aria-labelledby="coupon_list" id="fetch_option">
+            <option class="dropdown-item">列出所有Coupon</option>
+            <option class="dropdown-item" data-sql=" `coupon_expire`>`created_at`">列出有效期限內coupon</option>
+            <option class="dropdown-item" data-sql=" `coupon_expire`<`created_at`">列出已過期coupon</option>
+          </select>
+        </div>
+      </div> -->
+      <div class="col-md-2">
+        <div class="">
+          <select class="form-control" id="fetch_option_date">
+            <option class="dropdown-item" data-sql="">列出所有Coupon</option>
+            <option class="dropdown-item" data-sql="WHERE `coupon_expire`>`created_at`">列出有效期限內coupon</option>
+            <option class="dropdown-item" data-sql="WHERE `coupon_expire`<`created_at`">列出已過期coupon</option>
+          </select>
         </div>
       </div>
     </div>
@@ -138,87 +145,210 @@ include __DIR__ . './_navbar.php';
     </div>
     <script>
     $(function() {
-      $('#coupon_table').DataTable({
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-          url: "coupon_fetch.php",
-          type: "POST",
 
-        },
-        "columnDefs": [{
-            "targets": [11],
-            "data": "coupon_id",
-            "render": function(data, type, row, meta) {
-              return "<input data-coupon_id=" + data + " type='checkbox'>";
-            }
-          },
-          {
-            "targets": [10],
-            "data": "coupon_id",
-            "render": function(data, type, row, meta) {
-              return '<a href="_edit_coupon.php?coupon_id=' + data +
-                '" class="edit_btn mx-1 p-1" data-coupon_id=' + data +
-                '><i class="fas fa-edit"></i></a > <a href="#" class="del-btn mx-1 p-1" data-coupon_id=' +
-                data + '><i class="fas fa-trash-alt"></i></a>';
-            }
-          },
-        ],
-        "columns": [{
-            "data": "coupon_id"
-          },
-          {
-            "data": "coupon_name"
-          },
-          {
-            "data": "coupon_code"
-          },
-          {
-            "data": "created_at",
-            "className": "text-truncate"
-          },
-          {
-            "data": "dis_num"
-          },
-          {
-            "data": "dis_type",
-            "render": function(data) {
-              let display = ''
-              if (data == 1) {
-                display = "折扣";
-              } else if (data == 2) {
-                display = "扣除金額"
+      function fetch_coupon(sql) {
+        $('#coupon_table').DataTable({
+          dom: 'lf<"#pagi-wrap.d-flex"p>t<"mt-3"B>',
+          buttons: [{
+              className: 'btn btn-danger ',
+              attr: {
+                id: 'group_del_btn'
+              },
+              text: '多筆刪除',
+              action: group_del
+            },
+            {
+              className: 'btn btn-info',
+              text: '多筆指定:依使用者ID',
+              action: function(e, dt, node, config) {
+
+              },
+              attr: {
+                'data-toggle': 'modal',
+                'data-target': '#userIdModal'
               }
-              return display;
-            }
-          },
-          {
-            "data": "issue_condi",
-            "render": function(data) {
-              let display = ''
-              if (data == 1) {
-                display = "初次登入";
-              } else if (data == 2) {
-                display = "會員升等"
-              } else if (data == 3) {
-                display = '訂單累積';
+            },
+            {
+              className: 'btn btn-info',
+              text: '多筆指定:依使用者等級',
+              action: function(e, dt, node, config) {
+
+              },
+              attr: {
+                'data-toggle': 'modal',
+                'data-target': '#userLevelModal'
               }
-              return display;
+            }
+          ],
+          "processing": true,
+          "serverSide": true,
+          "order": [],
+          "ajax": {
+            url: "coupon_fetch.php",
+            type: "POST",
+            data: {
+              date_condition: sql
             }
           },
-          {
-            "data": "coupon_valid"
-          },
-          {
-            "data": "coupon_expire"
-          },
-          {
-            "data": "user_id"
-          },
-        ],
+          "columnDefs": [{
+              "targets": [11],
+              "data": "coupon_id",
+              "render": function(data, type, row, meta) {
+                return "<input data-coupon_id=" + data + " type='checkbox'>";
+              }
+            },
+            {
+              "targets": [10],
+              "data": "coupon_id",
+              "render": function(data, type, row, meta) {
+                return '<a href="_edit_coupon.php?coupon_id=' + data +
+                  '" class="edit_btn mx-1 p-1" data-coupon_id=' + data +
+                  '><i class="fas fa-edit"></i></a > <a href="#" class="del-btn mx-1 p-1" data-coupon_id=' +
+                  data + '><i class="fas fa-trash-alt"></i></a>';
+              }
+            },
+          ],
+          "columns": [{
+              "data": "coupon_id"
+            },
+            {
+              "data": "coupon_name"
+            },
+            {
+              "data": "coupon_code"
+            },
+            {
+              "data": "created_at",
+              "className": "text-truncate"
+            },
+            {
+              "data": "dis_num"
+            },
+            {
+              "data": "dis_type",
+              "render": function(data) {
+                let display = ''
+                if (data == 1) {
+                  display = "折扣";
+                } else if (data == 2) {
+                  display = "扣除金額"
+                }
+                return display;
+              }
+            },
+            {
+              "data": "issue_condi",
+              "render": function(data) {
+                let display = ''
+                if (data == 1) {
+                  display = "初次登入";
+                } else if (data == 2) {
+                  display = "會員升等"
+                } else if (data == 3) {
+                  display = '訂單累積';
+                }
+                return display;
+              }
+            },
+            {
+              "data": "coupon_valid"
+            },
+            {
+              "data": "coupon_expire"
+            },
+            {
+              "data": "user_id"
+            },
+          ],
+        })
+      }
+      fetch_coupon()
+      //prepend 新增coupon 按鈕
+      $('#pagi-wrap').prepend(
+        '<button class="btn btn-primary mr-auto"><a class="text-white" href="coupon_insert.php">新增coupon</a></button>'
+      )
+
+
+      $('#fetch_option_date').change(function() {
+        let sql = $("#fetch_option_date option:selected").data('sql')
+        $('#coupon_table').DataTable().destroy();
+        fetch_coupon(sql)
+
       })
+
+      const info_bar = $("#info_bar");
+
+      function delete_coupon() {
+        let coupon_id = $(this).data('coupon_id');
+        const form = new FormData();
+        form.append("coupon_id", coupon_id);
+        if (confirm(`確認是否刪除此筆coupon ID: ${coupon_id}`)) {
+          fetch('coupon_delete_api.php', {
+            method: "POST",
+            body: form
+          }).then(response => {
+            return response.json()
+          }).then(result => {
+            console.log(result);
+
+            info_bar.css("display", "block")
+            if (result['success']) {
+              info_bar.attr('class', 'alert alert-info').text('刪除成功');
+            } else {
+              info_bar.attr('class', 'alert alert-danger').text(result.errorMsg);
+            }
+            setTimeout(function() {
+              info_bar.css("display", "none")
+            }, 3000)
+
+            $('#coupon_table').DataTable().destroy();
+            fetch_coupon()
+            $("#select_all").prop('checked', false)
+          });
+
+        }
+      }
+      $("#coupon_table tbody").on("click", ".del-btn", delete_coupon);
+
+      function group_del(e, dt, node, config) {
+        let form = new FormData();
+        let delete_coupons = [];
+        $('#coupon_table tbody :checked').each(function() {
+          delete_coupons.push($(this).data('coupon_id'))
+        });
+        if (confirm('確認刪除資料')) {
+          info_bar.css('display', 'block');
+          if (delete_coupons.length < 1) {
+            info_bar.attr('class', 'alert alert-danger');
+            info_bar.html("未選擇資料");
+            setTimeout(function() {
+              info_bar.css('display', 'none')
+            }, 3000);
+            return false;
+          } else {
+            let delete_coupons_str = JSON.stringify(delete_coupons);
+            form.append('delete_coupons', delete_coupons_str);
+            fetch('_group_delete_api.php', {
+                method: 'POST',
+                body: form
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log(data);
+                $('#coupon_table').DataTable().destroy();
+                fetch_coupon(sql);
+                info_bar.attr('class', 'alert alert-success');
+                info_bar.html("刪除成功");
+                setTimeout(function() {
+                  info_bar.css('display', 'none')
+                }, 3000);
+              })
+          }
+        }
+      }
     });
+
+
     // fetch_coupon();
     // const info_bar = $('#info_bar');
 
