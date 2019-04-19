@@ -55,7 +55,7 @@ include __DIR__ . './_navbar.php';
       <div class="col-md-2">
         <div class="">
           <select class="form-control" id="fetch_option_date">
-            <option class="dropdown-item" data-sql="">列出所有Coupon</option>
+            <option class="dropdown-item">列出所有Coupon</option>
             <option class="dropdown-item" data-sql="WHERE `coupon_expire`>`created_at`">列出有效期限內coupon</option>
             <option class="dropdown-item" data-sql="WHERE `coupon_expire`<`created_at`">列出已過期coupon</option>
           </select>
@@ -148,7 +148,13 @@ include __DIR__ . './_navbar.php';
 
       function fetch_coupon(sql) {
         $('#coupon_table').DataTable({
+
           dom: 'lf<"#pagi-wrap.d-flex"p>t<"mt-3"B>',
+          drawCallback: function() {
+            $('#pagi-wrap').prepend(
+              '<button class="btn btn-primary mr-auto"><a class="text-white" href="coupon_insert.php">新增coupon</a></button>'
+            )
+          },
           buttons: [{
               className: 'btn btn-danger ',
               attr: {
@@ -264,9 +270,7 @@ include __DIR__ . './_navbar.php';
       }
       fetch_coupon()
       //prepend 新增coupon 按鈕
-      $('#pagi-wrap').prepend(
-        '<button class="btn btn-primary mr-auto"><a class="text-white" href="coupon_insert.php">新增coupon</a></button>'
-      )
+
 
 
       $('#fetch_option_date').change(function() {
