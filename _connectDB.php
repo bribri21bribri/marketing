@@ -2,7 +2,7 @@
 $host = 'localhost';
 $user = 'bri';
 $password = 'admin';
-$dbname = 'go_camping';
+$dbname = 'camp_test';
 
 $dsn = 'mysql:host=' . $host . ';dbname=' . $dbname;
 

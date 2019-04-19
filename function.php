@@ -1,9 +1,13 @@
 <?php
 include __DIR__ . '/_connectDB.php';
 
-function get_total_all_records($pdo)
+function get_total_all_records($pdo, $date_condition = "")
 {
-    $stmt = $pdo->prepare("SELECT * FROM coupon");
+    $sql = "SELECT * FROM coupon_genre";
+    $sql .= " " . $date_condition;
+    // return $sql;
+
+    $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $rows = $stmt->fetchAll();
     return $stmt->rowCount();
