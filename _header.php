@@ -16,7 +16,7 @@
   <script type="text/javascript" src="./DataTables/datatables.js"></script>
   <script src="./DataTables/Buttons-1.5.6/js/dataTables.buttons.min.js"></script>
   <script src="./DataTables/Buttons-1.5.6/js/buttons.print.js"></script>
-
+  <script src="./js/cleave.js"></script>
   <script src="./js/bootstrap.bundle.js"></script>
   <script src="./js/H-confirm-alert.js"></script>
   <title>Document</title>
