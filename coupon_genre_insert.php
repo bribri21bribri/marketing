@@ -1,3 +1,10 @@
+<?php
+require __DIR__ . '/_connectDB.php';
+$campsite_sql = 'SELECT  * FROM campsite_list';
+$stmt = $pdo->query($campsite_sql);
+$campsite_rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <?php include __DIR__ . './_header.php';
 include __DIR__ . './_navbar.php';
 ?>
@@ -33,17 +40,18 @@ include __DIR__ . './_navbar.php';
           <div class="form-group justify-content-center row">
             <label class="col-2 text-right"><span class="asterisk"> *</span>折扣類型</label>
             <div class="col-6">
-              <select class="form-control" name="dis_type">
-                <option value="1">打折</option>
-                <option value="2">扣除金額</option>
+              <select class="form-control" name="discount_type" id="discount_type">
+                <option value="percentage">打折</option>
+                <option value="currency">扣除金額</option>
               </select>
             </div>
           </div>
 
+
           <div class="form-group justify-content-center row">
-            <label class="col-2 text-right"><span class="asterisk"> *</span>促銷折扣數值</label>
+            <label class="col-2 text-right"><span class="asterisk"> *</span>促銷數值</label>
             <div class="col-6">
-              <input type="text" class="form-control" name="discount_unit" placeholder="輸入折扣數值">
+              <input type="text" class="form-control" name="discount_unit" id="discount_unit" placeholder="輸入折扣數值">
             </div>
           </div>
 
@@ -74,28 +82,37 @@ include __DIR__ . './_navbar.php';
           <div class="form-group justify-content-center row">
             <label class="col-2 text-right"><span class="asterisk"> *</span>適用營區</label>
             <div class="col-6">
-              <input type="date" class="form-control" id="coupon_expire" name="coupon_expire" value="">
+              <select class="form-control" name="camp_id" id="camp_id">
+                <?php foreach ($campsite_rows as $campsite): ?>
+                <option value="<?=$campsite['camp_id']?>">
+                  <?=$campsite['camp_name']?>
+                </option>
+                <?php endforeach?>
+              </select>
             </div>
           </div>
 
           <div class="form-group justify-content-center row">
             <label class="col-2 text-right"><span class="asterisk"> *</span>訂單價格條件</label>
             <div class="col-6">
-              <input type="text" class="form-control" id="order_price" name="order_price" value="">
+              <input type="text" class="form-control" id="order_price" name="order_price" value=""
+                placeholder="輸入此coupon適用之訂單最低金額">
             </div>
           </div>
 
           <div class="form-group justify-content-center row">
             <label class="col-2 text-right"><span class="asterisk"> *</span>訂單天數條件</label>
             <div class="col-6">
-              <input type="text" class="form-control" id="order_night" name="order_night" value="">
+              <input type="text" class="form-control" id="order_night" name="order_night" value=""
+                placeholder="輸入此coupon適用之訂單最低天數">
             </div>
           </div>
 
           <div class="form-group justify-content-center row">
             <label class="col-2 text-right"><span class="asterisk"> *</span>訂單人數條件</label>
             <div class="col-6">
-              <input type="text" class="form-control" id="order_people" name="order_people" value="">
+              <input type="text" class="form-control" id="order_people" name="order_people" value=""
+                placeholder="輸入此coupon適用之訂單最低人數">
             </div>
           </div>
 
@@ -118,11 +135,43 @@ include __DIR__ . './_navbar.php';
       </div>
     </div>
     <script>
+    $(function() {
+      $('#discount_type').on('click blur', function() {
+        let discount_type = $(this).val()
+        if (discount_type == 'percentage') {
+          $('#discount_unit').attr('placeholder', '輸入折扣數值')
+        } else if (discount_type == 'currency') {
+          $('#discount_unit').attr('placeholder', '輸入折抵金額')
+        }
+      })
+
+
+      //設定日期欄位最小日期為今日
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth() + 1; //January is 0!
+      var yyyy = today.getFullYear();
+      if (dd < 10) {
+        dd = '0' + dd
+      }
+      if (mm < 10) {
+        mm = '0' + mm
+      }
+
+      today = yyyy + '-' + mm + '-' + dd;
+      $('#avaliable_start').attr('min', today)
+      $('#avaliable_end').attr('min', today)
+      $('#coupon_expire').attr('min', today)
+
+
+    });
+    const info_bar = document.getElementById('info_bar')
+
     function sendForm(e) {
       const form = new FormData(coupon_form);
 
       $('#submit_btn').attr('disabled', true);
-      fetch('coupon_insert_api.php', {
+      fetch('coupon_genre_insert_api.php', {
           method: 'POST',
           body: form
         })
