@@ -212,7 +212,16 @@ include __DIR__ . './_navbar.php';
 
       function fetch_coupon() {
         $('#coupon_table').DataTable({
+          drawCallback: function() {
+            $('.switch').checkToggler({
 
+              labelOn: "啟用",
+              labelOff: "關閉"
+
+            }).on('change click blur', function() {
+              console.log('switch click')
+            });
+          },
           dom: 'lf<"#pagi-wrap.d-flex"<"mr-auto"B>p>t<"mt-3">',
           buttons: [{
               className: 'btn btn-primary ',
@@ -261,17 +270,15 @@ include __DIR__ . './_navbar.php';
               "targets": [7],
               "data": "gain_record_id",
               "render": function(data, type, row, meta) {
-                return "<input data-coupon_id=" + data + " type='checkbox'>";
+                return "<input data-coupon_record_id=" + data + " type='checkbox'>";
               }
             },
             {
               "targets": [6],
               "data": "gain_record_id",
               "render": function(data, type, row, meta) {
-                return '<a href="_edit_coupon.php?coupon_id=' + data +
-                  '" class="edit_btn mx-1 p-1" data-coupon_id=' + data +
-                  '><i class="fas fa-edit"></i></a > <a href="#" class="del-btn mx-1 p-1" data-coupon_id=' +
-                  data + '><i class="fas fa-trash-alt"></i></a>';
+                return '<input data-coupon_record_id=' + data +
+                  ' class="switch" type="checkbox" checked>';
               }
             },
           ],
@@ -293,9 +300,9 @@ include __DIR__ . './_navbar.php';
               "render": function(data) {
                 let display = ''
                 if (data == 1) {
-                  display = "有效";
+                  display = '啟用';
                 } else if (data == 2) {
-                  display = "無效"
+                  display = '關閉'
                 }
                 return display;
               }
@@ -308,7 +315,6 @@ include __DIR__ . './_navbar.php';
       }
       fetch_coupon()
       //prepend 新增coupon 按鈕
-
 
 
       // $('#fetch_option_date').change(function() {

@@ -12,6 +12,8 @@
   <link rel="stylesheet" type="text/css" href="./DataTables/datatables.css" />
   <link rel="stylesheet" href="./DataTables/Buttons-1.5.6/css/buttons.bootstrap4.min.css">
   <link rel="stylesheet" href="./css/H-confirm-alert.css">
+  <link rel="stylesheet" href="./css/bootstrap-toggle.min.css">
+  <link rel="stylesheet" href="./css/ui-toggle.css">
   <script src="./js/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="./DataTables/datatables.js"></script>
   <script src="./DataTables/Buttons-1.5.6/js/dataTables.buttons.min.js"></script>
@@ -19,6 +21,8 @@
   <script src="./js/cleave.js"></script>
   <script src="./js/bootstrap.bundle.js"></script>
   <script src="./js/H-confirm-alert.js"></script>
+  <script src="./js/bootstrap-toggle.min.js"></script>
+  <script src="./js/jquery.toggler.js"></script>
   <title>Document</title>
   <style>
   body {
