@@ -23,21 +23,27 @@ try {
 ?>
 
 <main class="col-lg-10">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="coupon_genre_list.php">優惠券查詢</a></li>
+      <li class="breadcrumb-item active">優惠券編輯</li>
+    </ol>
+  </nav>
   <section class="container">
     <!-- submit result message -->
     <div id="info_bar" style="display: none" class="alert alert-success"></div>
     <div class="card-body">
       <div class="row d-flex justify-content-center">
         <div class="col-sm-8">
-          <h5 class="card-title text-center">coupon編輯</h5>
+          <h5 class="card-title text-center">優惠券編輯</h5>
         </div>
       </div>
       <form method="POST" name="coupon_form" onsubmit="return sendForm()">
-        <h4>coupon ID: <?=$coupon_id?></h4>
+        <!-- <h4>coupon ID: <?=$coupon_id?></h4> -->
         <input type="hidden" name="coupon_id" value="<?=$coupon_id?>">
 
         <div class="form-group justify-content-center row">
-          <label class="col-2 text-right"><span class="asterisk"> *</span>coupon名稱</label>
+          <label class="col-2 text-right"><span class="asterisk"> *</span>優惠券名稱</label>
           <div class="col-6">
             <input type="text" class="form-control" name="coupon_name" placeholder="輸入coupon名稱"
               value="<?=$coupon_genre_row['coupon_name']?>">
@@ -135,7 +141,7 @@ try {
         </div>
 
         <div class="form-group justify-content-center row">
-          <label class="col-2 text-right"><span class="asterisk"> *</span>coupon描述</label>
+          <label class="col-2 text-right"><span class="asterisk"> *</span>優惠券描述</label>
           <div class="col-6">
             <textarea class="form-control" id="discription"
               name="discription"><?=$coupon_genre_row['discription']?></textarea>
@@ -144,7 +150,7 @@ try {
 
         <div class="form-group justify-content-center row  text-center">
           <div class="col-sm-8">
-            <button type="submit" class="btn btn-primary" id="submit_btn">Submit</button>
+            <button type="submit" class="btn btn-primary" id="submit_btn">輸入</button>
           </div>
         </div>
       </form>
@@ -184,8 +190,10 @@ $(function() {
 
 
 });
+const submit_btn = $('#submit_btn')
 
 function sendForm() {
+  submit_btn.attr('disabled', true)
   let form = new FormData(document.coupon_form);
   fetch('coupon_genre_edit_api.php', {
       method: 'POST',
@@ -205,7 +213,8 @@ function sendForm() {
       setTimeout(function() {
         info_bar.style.display = 'none';
       }, 3000);
-      submit_btn.style.display = "block";
+      submit_btn.attr('disabled', false)
+      console.log(submit_btn)
     });
   return false;
 }

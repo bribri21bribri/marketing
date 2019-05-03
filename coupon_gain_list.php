@@ -26,7 +26,7 @@ include __DIR__ . './_navbar.php';
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item active"><a href="#">coupon獲取紀錄查詢</a></li>
+      <li class="breadcrumb-item active"><a href="#">優惠券獲取紀錄查詢</a></li>
     </ol>
   </nav>
 
@@ -39,10 +39,11 @@ include __DIR__ . './_navbar.php';
 
       <div class="col-md-2">
         <div class="">
-          <select class="form-control" id="fetch_option_date">
-            <option class="dropdown-item">列出所有Coupon</option>
-            <option class="dropdown-item" data-sql="WHERE `coupon_expire`>`created_at`">列出有效期限內coupon</option>
-            <option class="dropdown-item" data-sql="WHERE `coupon_expire`<`created_at`">列出已過期coupon</option>
+          <select class="form-control" id="fetch_option_valid">
+            <option class="dropdown-item">列出所有紀錄</option>
+            <option class="dropdown-item" data-sql="WHERE `coupon_valid`='1'">列出有效優惠券</option>
+            <option class="dropdown-item" data-sql="WHERE `coupon_valid`='2'">列出無效優惠券</option>
+            <option class="dropdown-item" data-sql="WHERE `coupon_valid`='3'">列出已使用優惠券</option>
           </select>
         </div>
       </div>
@@ -54,8 +55,8 @@ include __DIR__ . './_navbar.php';
           <thead>
             <tr>
               <th scope="col">紀錄編號</th>
-              <th scope="col">Coupon編號</th>
-              <th scope="col">Coupon Code</th>
+              <th scope="col">優惠券編號</th>
+              <th scope="col">優惠碼</th>
               <th scope="col">取得日期</th>
               <th scope="col">有效狀態</th>
               <th scope="col">使用者編號</th>
@@ -160,7 +161,7 @@ include __DIR__ . './_navbar.php';
           <div class="modal-body">
             <form>
               <div class="form-group justify-content-center row">
-                <label class="col-auto text-right">將以選取紀錄設為</label>
+                <label class="col-auto text-right">將已選取紀錄設為</label>
                 <div class="">
                   <input id='multi_switch' type='checkbox'>
                   <small class="form-text text-muted"></small>
@@ -211,7 +212,7 @@ include __DIR__ . './_navbar.php';
 
     $(function() {
 
-      function fetch_coupon() {
+      function fetch_coupon(sql) {
         $('#coupon_table').DataTable({
           drawCallback: function() {
             let checkCount = $("tbody .checkbox_manipulation :checkbox").length
@@ -265,23 +266,12 @@ include __DIR__ . './_navbar.php';
           buttons: [{
               className: 'btn btn-primary ',
               attr: {
-                id: 'coupon_insert_btn'
+                id: 'coupon_gain_insert_btn'
               },
               text: '新增coupon獲取紀錄',
               action: function() {
                 window.location = './coupon_gain_insert.php'
               },
-            },
-            {
-              className: 'btn btn-info',
-              text: '新增獲取紀錄:指定使用者等級',
-              action: function(e, dt, node, config) {
-
-              },
-              attr: {
-                'data-toggle': 'modal',
-                'data-target': '#userLevelModal'
-              }
             },
             {
               className: 'btn btn-info',
@@ -302,7 +292,7 @@ include __DIR__ . './_navbar.php';
             url: "coupon_gain_list_api.php",
             type: "POST",
             data: {
-
+              valid_condition: sql
             }
           },
           "columnDefs": [{
@@ -369,6 +359,13 @@ include __DIR__ . './_navbar.php';
         })
       }
       fetch_coupon()
+      $('#fetch_option_valid').change(function() {
+        let sql = $("#fetch_option_valid option:selected").data('sql')
+        $('#coupon_table').DataTable().destroy();
+        fetch_coupon(sql)
+
+      })
+
       $('#multi_switch').checkToggler({
         labelOn: "啟用",
         labelOff: "關閉"

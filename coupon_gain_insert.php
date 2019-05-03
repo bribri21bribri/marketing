@@ -30,8 +30,8 @@ include __DIR__ . './_navbar.php';
 <main class="col-10 bg-white">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="./coupon_gain_list.php">coupon獲取紀錄查詢</a></li>
-      <li class="breadcrumb-item active"><a href="#">新增coupon獲取紀錄</a></li>
+      <li class="breadcrumb-item"><a href="./coupon_gain_list.php">優惠券獲取紀錄查詢</a></li>
+      <li class="breadcrumb-item active">新增優惠券獲取紀錄</li>
     </ol>
   </nav>
   <section class="" style="height: 100%;">

@@ -12,7 +12,7 @@ include __DIR__ . './_navbar.php';
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item active"><a href="#">coupon查詢</a></li>
+      <li class="breadcrumb-item active">優惠券查詢</li>
     </ol>
   </nav>
   <section class="container-fluid" style="height: 100%;">
@@ -59,60 +59,7 @@ include __DIR__ . './_navbar.php';
       </div>
     </div>
 
-    <!-- <div class="modal fade" id="userIdModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="recipient-name" class="col-form-label">使用者ID</label>
-                <input type="text" placeholder="輸入欲指派使用者ID" id="assign_by_id" class="form-control">
-              </div>
 
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="group_assign_submit">配發</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="userLevelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <select class="form-control" name="issue_level" id="issue_level">
-                <?php foreach ($mem_rows as $mem_row): ?>
-                <option value="<?=$mem_row['mem_level']?>"><?=$mem_row['level_title']?></option>
-                <?php endforeach;?>
-              </select>
-
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="issue_by_level_submit">配發</button>
-          </div>
-        </div>
-      </div>
-    </div> -->
     <script>
     $(function() {
 
@@ -144,16 +91,16 @@ include __DIR__ . './_navbar.php';
           },
           "columnDefs": [{
               "targets": [12],
-              "data": "coupon_id",
+              "data": "coupon_genre_id",
               "render": function(data, type, row, meta) {
                 return "<input data-coupon_id=" + data + " type='checkbox'>";
               }
             },
             {
               "targets": [13],
-              "data": "coupon_id",
+              "data": "coupon_genre_id",
               "render": function(data, type, row, meta) {
-                return '<a href="_edit_coupon.php?coupon_id=' + data +
+                return '<a href="coupon_genre_edit.php?coupon_id=' + data +
                   '" class="edit_btn mx-1 p-1" data-coupon_id=' + data +
                   '><i class="fas fa-edit"></i></a > <a href="#" class="del-btn mx-1 p-1" data-coupon_id=' +
                   data + '><i class="fas fa-trash-alt"></i></a>';
@@ -173,9 +120,9 @@ include __DIR__ . './_navbar.php';
               "data": "discount_type",
               "render": function(data) {
                 let display = ''
-                if (data == 1) {
+                if (data == 'percentage') {
                   display = "折扣";
-                } else if (data == 2) {
+                } else if (data == 'currency') {
                   display = "扣除金額"
                 }
                 return display;
@@ -209,47 +156,62 @@ include __DIR__ . './_navbar.php';
         })
       }
       fetch_coupon()
-      
-      //切換表格依照coupon是否過期
+
+
+
+
       $('#fetch_option_date').change(function() {
         let sql = $("#fetch_option_date option:selected").data('sql')
         $('#coupon_table').DataTable().destroy();
         fetch_coupon(sql)
+
       })
 
       const info_bar = $("#info_bar");
 
-      function delete_coupon() {
-        let coupon_id = $(this).data('coupon_id');
-        const form = new FormData();
-        form.append("coupon_id", coupon_id);
-        if (confirm(`確認是否刪除此筆coupon ID: ${coupon_id}`)) {
-          fetch('coupon_delete_api.php', {
-            method: "POST",
-            body: form
-          }).then(response => {
-            return response.json()
-          }).then(result => {
-            console.log(result);
 
-            info_bar.css("display", "block")
-            if (result['success']) {
-              info_bar.attr('class', 'alert alert-info').text('刪除成功');
-            } else {
-              info_bar.attr('class', 'alert alert-danger').text(result.errorMsg);
-            }
-            setTimeout(function() {
-              info_bar.css("display", "none")
-            }, 3000)
+      $("#coupon_table tbody").on("click", ".del-btn", function() {
+        let del_btn = $(this)
+        // console.log(del_btn)
+        $.confirm.show({
+          "message": "確認刪除此筆coupon",
+          "yesText": "確認",
+          "noText": "取消",
+          "yes": function() {
+            let coupon_id = del_btn.data('coupon_id');
+            // console.log(coupon_id)
+            console.log(del_btn)
+            const form = new FormData();
+            form.append("coupon_id", coupon_id);
+            fetch('coupon_genre_delete_api.php', {
+              method: "POST",
+              body: form
+            }).then(response => {
+              return response.json()
+            }).then(result => {
+              console.log(result);
 
-            $('#coupon_table').DataTable().destroy();
-            fetch_coupon()
-            $("#select_all").prop('checked', false)
-          });
+              info_bar.css("display", "block")
+              if (result['success']) {
+                info_bar.attr('class', 'alert alert-info').text('刪除成功');
+              } else {
+                info_bar.attr('class', 'alert alert-danger').text(result.errorMsg);
+              }
+              setTimeout(function() {
+                info_bar.css("display", "none")
+              }, 3000)
 
-        }
-      }
-      $("#coupon_table tbody").on("click", ".del-btn", delete_coupon);
+              $('#coupon_table').DataTable().destroy();
+              fetch_coupon()
+              $("#select_all").prop('checked', false)
+            });
+          },
+          "no": function() {
+            return false
+          },
+        })
+      });
+
 
       function group_del(e, dt, node, config) {
         let form = new FormData();

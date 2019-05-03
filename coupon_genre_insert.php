@@ -11,8 +11,8 @@ include __DIR__ . './_navbar.php';
 <main class="col-10 bg-white">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="./coupon_list.php">coupon查詢</a></li>
-      <li class="breadcrumb-item active"><a href="#">新增coupon</a></li>
+      <li class="breadcrumb-item"><a href="./coupon_list.php">優惠券查詢</a></li>
+      <li class="breadcrumb-item active">新增優惠券</li>
     </ol>
   </nav>
   <section class="" style="height: 100%;">
@@ -24,13 +24,13 @@ include __DIR__ . './_navbar.php';
 
         <div class="row d-flex justify-content-center">
           <div class="col-sm-8">
-            <h5 class="card-title text-center">新增coupon</h5>
+            <h5 class="card-title text-center">新增優惠券</h5>
           </div>
         </div>
         <form method="POST" name="coupon_form" onsubmit="return sendForm()">
 
           <div class="form-group justify-content-center row">
-            <label class="col-2 text-right"><span class="asterisk"> *</span>coupon名稱</label>
+            <label class="col-2 text-right"><span class="asterisk"> *</span>優惠券名稱</label>
             <div class="col-6">
               <input type="text" class="form-control" name="coupon_name" placeholder="輸入coupon名稱">
               <small class="form-text text-muted"></small>
@@ -93,7 +93,7 @@ include __DIR__ . './_navbar.php';
           </div>
 
           <div class="form-group justify-content-center row">
-            <label class="col-2 text-right"><span class="asterisk"> *</span>訂單價格條件</label>
+            <label class="col-2 text-right">訂單價格條件</label>
             <div class="col-6">
               <input type="text" class="form-control" id="order_price" name="order_price" value=""
                 placeholder="輸入此coupon適用之訂單最低金額">
@@ -101,7 +101,7 @@ include __DIR__ . './_navbar.php';
           </div>
 
           <div class="form-group justify-content-center row">
-            <label class="col-2 text-right"><span class="asterisk"> *</span>訂單天數條件</label>
+            <label class="col-2 text-right">訂單天數條件</label>
             <div class="col-6">
               <input type="text" class="form-control" id="order_night" name="order_night" value=""
                 placeholder="輸入此coupon適用之訂單最低天數">
@@ -109,7 +109,7 @@ include __DIR__ . './_navbar.php';
           </div>
 
           <div class="form-group justify-content-center row">
-            <label class="col-2 text-right"><span class="asterisk"> *</span>訂單人數條件</label>
+            <label class="col-2 text-right">訂單人數條件</label>
             <div class="col-6">
               <input type="text" class="form-control" id="order_people" name="order_people" value=""
                 placeholder="輸入此coupon適用之訂單最低人數">
@@ -117,7 +117,7 @@ include __DIR__ . './_navbar.php';
           </div>
 
           <div class="form-group justify-content-center row">
-            <label class="col-2 text-right"><span class="asterisk"> *</span>coupon描述</label>
+            <label class="col-2 text-right"><span class="asterisk"> *</span>優惠券描述</label>
             <div class="col-6">
               <textarea class="form-control" id="discription" name="discription" value=""></textarea>
             </div>
@@ -127,7 +127,7 @@ include __DIR__ . './_navbar.php';
 
           <div class="form-group justify-content-center row  text-center">
             <div class="col-sm-8">
-              <button type="submit" class="btn btn-primary" id="submit_btn">Submit</button>
+              <button type="submit" class="btn btn-primary" id="submit_btn">新增</button>
             </div>
           </div>
 

@@ -8,6 +8,7 @@ $result = [
     'errorCode' => 0,
     'errorMsg' => '資料輸入不完整',
     'post' => [], // 做 echo 檢查
+    'rowCount' => 0,
 
 ];
 
@@ -66,14 +67,14 @@ if (isset($_POST['coupon_name'])) {
             $discription,
             $coupon_id,
         ]);
-
+        $result['rowCount'] = $stmt->rowCount();
         if ($stmt->rowCount() == 1) {
             $result['success'] = true;
             $result['errorCode'] = 200;
             $result['errorMsg'] = '';
         } else {
             $result['errorCode'] = 402;
-            $result['errorMsg'] = '修改錯誤';
+            $result['errorMsg'] = '資料未修改';
         }
     } catch (PDOException $ex) {
         $result['errorCode'] = 403;

@@ -17,15 +17,16 @@ $result = [
     'sql' => '',
     'total_row' => 0,
 ];
-
+$result['post'] = $_POST;
 $sql = "SELECT * FROM coupon_gain ";
-if (isset($_POST["date_condition"])) {
-    $result['recordsFiltered'] = get_all_gain_records($pdo);
-    $sql .= $_POST["date_condition"] . 'AND';
+if (isset($_POST["valid_condition"])) {
+    $result['recordsFiltered'] = get_all_gain_records($pdo, $_POST["valid_condition"]);
+    $sql .= $_POST["valid_condition"] . ' ' . 'AND';
 } else {
     $result['recordsFiltered'] = get_all_gain_records($pdo);
     $sql .= 'WHERE';
 }
+$result['sql'] = $sql;
 
 if (isset($_POST["search"]["value"])) {
     //以coupon_code 做搜尋條件
