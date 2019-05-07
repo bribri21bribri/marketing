@@ -74,9 +74,9 @@ include __DIR__ . './_navbar.php';
           <div class="form-group justify-content-center row">
             <label class="col-2 text-right"><span class="asterisk"> *</span>使用者</label>
             <div class="col-6">
-              <select class="form-control" name="mem_id" id="mem_id">
+              <select class="form-control" name="mem_account" id="mem_account">
                 <?php foreach ($member_rows as $member): ?>
-                <option value="<?=$member['mem_id']?>">
+                <option value="<?=$member['mem_account']?>">
                   <?=$member['mem_account']?>
                 </option>
                 <?php endforeach?>

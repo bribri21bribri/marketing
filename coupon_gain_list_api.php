@@ -32,7 +32,7 @@ if (isset($_POST["search"]["value"])) {
     //以coupon_code 做搜尋條件
     $sql .= '(coupon_code LIKE "%' . $_POST["search"]["value"] . '%" ';
     //以user_id 做搜尋條件
-    $sql .= 'OR user_id LIKE "%' . $_POST["search"]["value"] . '%" )';
+    $sql .= 'OR mem_account LIKE "%' . $_POST["search"]["value"] . '%" )';
 }
 
 if (isset($_POST['data']["order"])) {

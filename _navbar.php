@@ -123,8 +123,11 @@
       </div>
 
       <div id="collapseSix" class="collapse show" aria-labelledby="headingSix" data-parent="#accordionExample">
-        <a class="card-body ml-2 d-flex" href="_plan_list.php">
-          行銷方案管理
+        <a class="card-body ml-2 d-flex" href="promo_list.php">
+          優惠方案管理
+        </a>
+        <a class="card-body ml-2 d-flex" href="promo_apply_list.php">
+          優惠方案參加紀錄管理
         </a>
         <a class="card-body ml-2 d-flex" href="coupon_genre_list.php">
           優惠券管理

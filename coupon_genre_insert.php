@@ -11,7 +11,7 @@ include __DIR__ . './_navbar.php';
 <main class="col-10 bg-white">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="./coupon_list.php">優惠券查詢</a></li>
+      <li class="breadcrumb-item"><a href="./coupon_genre_list.php">優惠券查詢</a></li>
       <li class="breadcrumb-item active">新增優惠券</li>
     </ol>
   </nav>

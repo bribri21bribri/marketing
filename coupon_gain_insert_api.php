@@ -14,10 +14,10 @@ $result = [
 if (isset($_POST['insert_record_amount'])) {
     $insert_record_amount = htmlentities($_POST['insert_record_amount']);
     $coupon_genre_id = htmlentities($_POST['coupon_genre']);
-    $user_id = htmlentities($_POST['mem_id']);
+    $mem_account = htmlentities($_POST['mem_account']);
 
     $result['post'] = $_POST;
-    if (empty($insert_record_amount) or empty($coupon_genre_id) or empty($user_id)) {
+    if (empty($insert_record_amount) or empty($coupon_genre_id) or empty($mem_account)) {
         $result['errorCode'] = 400;
         echo json_encode($result, JSON_UNESCAPED_UNICODE);
         exit;
@@ -29,7 +29,7 @@ if (isset($_POST['insert_record_amount'])) {
     //generate coupon code
     //
 
-    $sql = "INSERT INTO `coupon_gain` (`coupon_genre_id`,`coupon_code`,`user_id`) VALUES (?,?,?) ";
+    $sql = "INSERT INTO `coupon_gain` (`coupon_genre_id`,`coupon_code`,`mem_account`) VALUES (?,?,?) ";
     $insert_time = 0;
     for ($i = 0; $i < $insert_record_amount; $i++) {
         $coupon_code = generate_code($pdo);
@@ -39,7 +39,7 @@ if (isset($_POST['insert_record_amount'])) {
             $stmt->execute([
                 $coupon_genre_id,
                 $coupon_code,
-                $user_id,
+                $mem_account,
             ]);
 
             if ($stmt->rowCount() == 1) {
