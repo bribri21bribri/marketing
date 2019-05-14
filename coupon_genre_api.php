@@ -18,7 +18,7 @@ $result = [
     'total_row' => 0,
 ];
 
-$sql = "SELECT * FROM coupon_genre ";
+$sql = "SELECT * FROM coupon_genre as o LEFT OUTER JOIN campsite_list as p on o.camp_id = p.camp_id ";
 if (isset($_POST["date_condition"])) {
     $result['recordsFiltered'] = get_total_all_records($pdo, $_POST["date_condition"]);
     $sql .= $_POST["date_condition"] . 'AND';
@@ -28,17 +28,12 @@ if (isset($_POST["date_condition"])) {
 }
 
 if (isset($_POST["search"]["value"])) {
-    //以coupon_id 做搜尋條件
-    $sql .= '(coupon_genre_id LIKE "%' . $_POST["search"]["value"] . '%" ';
-    //以coupon_name 做搜尋條件
-    $sql .= 'OR coupon_name LIKE "%' . $_POST["search"]["value"] . '%" )';
-    // //以coupon_code 做搜尋條件
-    // $sql .= 'OR coupon_code LIKE "%' . $_POST["search"]["value"] . '%" ';
-    //以user_id 做搜尋條件
-    // $sql .= 'OR user_id LIKE "%' . $_POST["search"]["value"] . '%" )';
+
+    $sql .= '(o.coupon_name LIKE "%' . $_POST["search"]["value"] . '%" )';
+
 }
 
-if (isset($_POST['data']["order"])) {
+if (isset($_POST["order"])) {
     $order_by = $_POST['order']['0']['column'] + 1;
     $sql .= 'ORDER BY ' . $order_by . ' ' . $_POST['order']['0']['dir'] . ' ';
 } else {

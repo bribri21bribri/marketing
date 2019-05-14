@@ -214,234 +214,202 @@ include __DIR__ . './_navbar.php';
 
       function fetch_coupon(sql) {
         $('#coupon_table').DataTable({
-            drawCallback: function() {
-              let checkCount = $("tbody .checkbox_manipulation :checkbox").length
-              let checkedCount = $("tbody .checkbox_manipulation :checked").length
-              $("#checkAll").click(function() {
-                let checkAll = $("#checkAll").prop("checked");
-                $("tbody :checkbox").prop("checked", checkAll);
-              })
+          drawCallback: function() {
+            let checkCount = $("tbody .checkbox_manipulation :checkbox").length
+            let checkedCount = $("tbody .checkbox_manipulation :checked").length
+            $("#checkAll").click(function() {
+              let checkAll = $("#checkAll").prop("checked");
+              $("tbody :checkbox").prop("checked", checkAll);
+            })
 
-              $(".checkbox_manipulation :checkbox").click(function() {
-                checkedCount = $("tbody .checkbox_manipulation :checked").length
-                if (checkCount == checkedCount) {
-                  $("#checkAll").prop("checked", true)
-                } else {
-                  $("#checkAll").prop("checked", false)
-
-                }
-              })
-
-
-
-              $('.switch').checkToggler({
-
-                labelOn: "啟用",
-                labelOff: "關閉"
-
-              }).on('change', function() {
-                let coupon_record_id = $(this).data('coupon_record_id')
-                let coupon_valid = 0
-                if ($(this).prop('checked')) {
-                  coupon_valid = 1
-                } else {
-                  coupon_valid = 2
-                }
-                // console.log(coupon_valid)
-                const formData = new FormData()
-                formData.append('coupon_record_id', coupon_record_id)
-                formData.append('coupon_valid', coupon_valid)
-
-                fetch('coupon_gain_edit_api.php', {
-                  method: 'POST',
-                  body: formData
-                }).then(obj => obj.json()).then(result => {
-                  // console.log(result)
-                  $('#coupon_table').DataTable().destroy()
-                  fetch_coupon()
-                })
-              });
-            },
-            dom: 'lf<"#pagi-wrap.d-flex"<"mr-auto"B>p>t<"mt-3">',
-            buttons: [{
-                className: 'btn btn-primary ',
-                attr: {
-                  id: 'coupon_gain_insert_btn'
-                },
-                text: '新增coupon獲取紀錄',
-                action: function() {
-                  window.location = './coupon_gain_insert.php'
-                },
-              },
-              {
-                className: 'btn btn-info',
-                text: '多筆操作',
-                action: function(e, dt, node, config) {
-
-                },
-                attr: {
-                  'data-toggle': 'modal',
-                  'data-target': '#multi_switch_modal'
-                }
-              },
-            ],
-            "processing": true,
-            "serverSide": true,
-            "order": [],
-            "ajax": {
-              url: "coupon_gain_list_api.php",
-              type: "POST",
-              data: {
-                valid_condition: sql
-              }
-            },
-            "columnDefs": [{
-                "targets": [7],
-                "data": "gain_record_id",
-                "className": "checkbox_manipulation",
-                "render": function(data, type, row, meta) {
-                  return "<input data-coupon_record_id=" + data + " type='checkbox'>";
-                }
-              },
-              {
-                "targets": [6],
-                "data": "gain_record_id",
-                "render": function(data, type, row, meta) {
-                  let render = '';
-                  switch (row.coupon_valid) {
-                    case '1':
-                      render = '<input data-coupon_record_id=' + data +
-                        ' class="switch" type="checkbox" checked>';
-                      break;
-                    case '2':
-                      render = '<input data-coupon_record_id=' + data +
-                        ' class="switch" type="checkbox">';
-                      break;
-                    case '3':
-                      render = '';
-                      break
-                  }
-                  return render;
-                }
-              },
-            ],
-            "columns": [{
-                "data": "gain_record_id"
-              },
-              {
-                "data": "coupon_genre_id"
-              },
-              {
-                "data": "coupon_code"
-              },
-              {
-                "data": "gain_date",
-                "className": "text-truncate"
-              },
-              {
-                "data": "coupon_valid",
-                "render": function(data) {
-                  let display = ''
-                  if (data == 1) {
-                    display = '啟用';
-                  } else if (data == 2) {
-                    display = '關閉'
-                  } else if (data == 3) {
-                    display = '已使用'
-                  }
-                  return display;
-                }
-              },
-              {
-                "data": "mem_account",
+            $(".checkbox_manipulation :checkbox").click(function() {
+              checkedCount = $("tbody .checkbox_manipulation :checked").length
+              if (checkCount == checkedCount) {
+                $("#checkAll").prop("checked", true)
+              } else {
+                $("#checkAll").prop("checked", false)
 
               }
-            }
+            })
+
+
+
+            $('.switch').checkToggler({
+
+              labelOn: "啟用",
+              labelOff: "關閉"
+
+            }).on('change', function() {
+              let coupon_record_id = $(this).data('coupon_record_id')
+              let coupon_valid = 0
+              if ($(this).prop('checked')) {
+                coupon_valid = 1
+              } else {
+                coupon_valid = 2
+              }
+              // console.log(coupon_valid)
+              const formData = new FormData()
+              formData.append('coupon_record_id', coupon_record_id)
+              formData.append('coupon_valid', coupon_valid)
+
+              fetch('coupon_gain_edit_api.php', {
+                method: 'POST',
+                body: formData
+              }).then(obj => obj.json()).then(result => {
+                // console.log(result)
+                $('#coupon_table').DataTable().destroy()
+                fetch_coupon()
+              })
+            });
+          },
+          dom: 'lf<"#pagi-wrap.d-flex"<"mr-auto"B>p>t<"mt-3">',
+          buttons: [{
+              className: 'btn btn-primary ',
+              attr: {
+                id: 'coupon_gain_insert_btn'
+              },
+              text: '新增coupon獲取紀錄',
+              action: function() {
+                window.location = './coupon_gain_insert.php'
+              },
+            },
+            {
+              className: 'btn btn-info',
+              text: '多筆操作',
+              action: function(e, dt, node, config) {
+
+              },
+              attr: {
+                'data-toggle': 'modal',
+                'data-target': '#multi_switch_modal'
+              }
+            },
           ],
+          "processing": true,
+          "serverSide": true,
+          "order": [],
+          "ajax": {
+            url: "coupon_gain_list_api.php",
+            type: "POST",
+            data: {
+              valid_condition: sql
+            }
+          },
+          "columnDefs": [{
+              "targets": [7],
+              "data": "gain_record_id",
+              "className": "checkbox_manipulation",
+              "render": function(data, type, row, meta) {
+                return "<input data-coupon_record_id=" + data + " type='checkbox'>";
+              }
+            },
+            {
+              "targets": [6],
+              "data": "gain_record_id",
+              "render": function(data, type, row, meta) {
+                let render = '';
+                switch (row.coupon_valid) {
+                  case '1':
+                    render = '<input data-coupon_record_id=' + data +
+                      ' class="switch" type="checkbox" checked>';
+                    break;
+                  case '2':
+                    render = '<input data-coupon_record_id=' + data +
+                      ' class="switch" type="checkbox">';
+                    break;
+                  case '3':
+                    render = '';
+                    break
+                }
+                return render;
+              }
+            },
+          ],
+          "columns": [{
+              "data": "gain_record_id"
+            },
+            {
+              "data": "coupon_genre_id"
+            },
+            {
+              "data": "coupon_code"
+            },
+            {
+              "data": "gain_date",
+              "className": "text-truncate"
+            },
+            {
+              "data": "coupon_valid",
+              "render": function(data) {
+                let display = ''
+                if (data == 1) {
+                  display = '啟用';
+                } else if (data == 2) {
+                  display = '關閉'
+                } else if (data == 3) {
+                  display = '已使用'
+                }
+                return display;
+              }
+            },
+            {
+              "data": "mem_account",
+            }
+
+          ],
+
         })
-    }
-    fetch_coupon() $('#fetch_option_valid').change(function() {
-      let sql = $("#fetch_option_valid option:selected").data('sql')
-      $('#coupon_table').DataTable().destroy();
-      fetch_coupon(sql)
+      }
+      fetch_coupon()
+      $('#fetch_option_valid').change(function() {
+        let sql = $("#fetch_option_valid option:selected").data('sql')
+        $('#coupon_table').DataTable().destroy();
+        fetch_coupon(sql)
 
-    })
+      })
 
-    $('#multi_switch').checkToggler({
-      labelOn: "啟用",
-      labelOff: "關閉"
-    })
+      $('#multi_switch').checkToggler({
+        labelOn: "啟用",
+        labelOff: "關閉"
+      })
 
-    const info_bar = $("#info_bar");
-
-    // function delete_coupon() {
-    //   let coupon_id = $(this).data('coupon_id');
-    //   const form = new FormData();
-    //   form.append("coupon_id", coupon_id);
-    //   if (confirm(`確認是否刪除此筆coupon ID: ${coupon_id}`)) {
-    //     fetch('coupon_delete_api.php', {
-    //       method: "POST",
-    //       body: form
-    //     }).then(response => {
-    //       return response.json()
-    //     }).then(result => {
-    //       console.log(result);
-
-    //       info_bar.css("display", "block")
-    //       if (result['success']) {
-    //         info_bar.attr('class', 'alert alert-info').text('刪除成功');
-    //       } else {
-    //         info_bar.attr('class', 'alert alert-danger').text(result.errorMsg);
-    //       }
-    //       setTimeout(function() {
-    //         info_bar.css("display", "none")
-    //       }, 3000)
-
-    //       $('#coupon_table').DataTable().destroy();
-    //       fetch_coupon()
-    //       $("#select_all").prop('checked', false)
-    //     });
-
-    //   }
-    // }
-    // $("#coupon_table tbody").on("click", ".del-btn", delete_coupon);
-
-    // function group_del(e, dt, node, config) {
-    //   let form = new FormData();
-    //   let delete_coupons = [];
-    //   $('#coupon_table tbody :checked').each(function() {
-    //     delete_coupons.push($(this).data('coupon_id'))
-    //   });
-    //   if (confirm('確認刪除資料')) {
-    //     info_bar.css('display', 'block');
-    //     if (delete_coupons.length < 1) {
-    //       info_bar.attr('class', 'alert alert-danger');
-    //       info_bar.html("未選擇資料");
-    //       setTimeout(function() {
-    //         info_bar.css('display', 'none')
-    //       }, 3000);
-    //       return false;
-    //     } else {
-    //       let delete_coupons_str = JSON.stringify(delete_coupons);
-    //       form.append('delete_coupons', delete_coupons_str);
-    //       fetch('_group_delete_api.php', {
-    //           method: 'POST',
-    //           body: form
-    //         })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //           console.log(data);
-    //           $('#coupon_table').DataTable().destroy();
-    //           fetch_coupon(sql);
-    //           info_bar.attr('class', 'alert alert-success');
-    //           info_bar.html("刪除成功");
-    //           setTimeout(function() {
-    //             info_bar.css('display', 'none')
-    //           }, 3000);
-    //         })
-    //     }
-    //   }
-    // }
+      const info_bar = $("#info_bar");
+      // function group_del(e, dt, node, config) {
+      //   let form = new FormData();
+      //   let delete_coupons = [];
+      //   $('#coupon_table tbody :checked').each(function() {
+      //     delete_coupons.push($(this).data('coupon_id'))
+      //   });
+      //   if (confirm('確認刪除資料')) {
+      //     info_bar.css('display', 'block');
+      //     if (delete_coupons.length < 1) {
+      //       info_bar.attr('class', 'alert alert-danger');
+      //       info_bar.html("未選擇資料");
+      //       setTimeout(function() {
+      //         info_bar.css('display', 'none')
+      //       }, 3000);
+      //       return false;
+      //     } else {
+      //       let delete_coupons_str = JSON.stringify(delete_coupons);
+      //       form.append('delete_coupons', delete_coupons_str);
+      //       fetch('_group_delete_api.php', {
+      //           method: 'POST',
+      //           body: form
+      //         })
+      //         .then(response => response.json())
+      //         .then(data => {
+      //           console.log(data);
+      //           $('#coupon_table').DataTable().destroy();
+      //           fetch_coupon(sql);
+      //           info_bar.attr('class', 'alert alert-success');
+      //           info_bar.html("刪除成功");
+      //           setTimeout(function() {
+      //             info_bar.css('display', 'none')
+      //           }, 3000);
+      //         })
+      //     }
+      //   }
+      // }
     });
     </script>
     <?php include __DIR__ . './_footer.php'?>

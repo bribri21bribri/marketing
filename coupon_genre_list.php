@@ -46,7 +46,7 @@ include __DIR__ . './_navbar.php';
               <th scope="col">適用營地</th>
               <th scope="col">訂單價格條件</th>
               <th scope="col">訂單日數條件</th>
-              <th scope="col">訂單人數條件</th>
+
               <th scope="col">描述</th>
               <th scope="col">操作</th>
               <th scope="col"><input type="checkbox" id="select_all"></th>
@@ -65,6 +65,9 @@ include __DIR__ . './_navbar.php';
 
       function fetch_coupon(sql) {
         $('#coupon_table').DataTable({
+          language: {
+            searchPlaceholder: "輸入優惠券名稱"
+          },
 
           dom: 'lf<"#pagi-wrap.d-flex"<"mr-auto"B>p>t<"mt-3">',
 
@@ -90,14 +93,14 @@ include __DIR__ . './_navbar.php';
             }
           },
           "columnDefs": [{
-              "targets": [12],
+              "targets": [11],
               "data": "coupon_genre_id",
               "render": function(data, type, row, meta) {
                 return "<input data-coupon_id=" + data + " type='checkbox'>";
               }
             },
             {
-              "targets": [13],
+              "targets": [12],
               "data": "coupon_genre_id",
               "render": function(data, type, row, meta) {
                 return '<a href="coupon_genre_edit.php?coupon_id=' + data +
@@ -114,7 +117,16 @@ include __DIR__ . './_navbar.php';
               "data": "coupon_name"
             },
             {
-              "data": "discount_unit"
+              "data": "discount_unit",
+              "render": function(data, type, row, meta) {
+                let display = ''
+                if (row.discount_type == 'percentage') {
+                  display = data + '折'
+                } else if (row.discount_type == 'currency') {
+                  display = data + '元'
+                }
+                return display
+              }
             },
             {
               "data": "discount_type",
@@ -138,17 +150,25 @@ include __DIR__ . './_navbar.php';
               "data": "coupon_expire"
             },
             {
-              "data": "camp_id",
+              "data": "camp_name",
             },
             {
-              "data": "order_price"
+              "data": "order_price",
+              "render": function(data) {
+                let display = ''
+                display = "訂購滿" + data + "元"
+                return display
+              }
             },
             {
-              "data": "order_night"
+              "data": "order_night",
+              "render": function(data) {
+                let display = ''
+                display = "訂購滿" + data + "夜"
+                return display
+              }
             },
-            {
-              "data": "order_people"
-            },
+
             {
               "data": "discription"
             },

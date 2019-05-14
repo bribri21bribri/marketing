@@ -39,7 +39,7 @@ include __DIR__ . './_navbar.php';
 
           <div class="form-group justify-content-center row">
             <label class="col-2 text-right"><span class="asterisk"> *</span>折扣類型</label>
-            <div class="col-6">
+            <div class="col-6 ">
               <select class="form-control" name="discount_type" id="discount_type">
                 <option value="percentage">打折</option>
                 <option value="currency">扣除金額</option>
@@ -49,9 +49,13 @@ include __DIR__ . './_navbar.php';
 
 
           <div class="form-group justify-content-center row">
-            <label class="col-2 text-right"><span class="asterisk"> *</span>促銷數值</label>
-            <div class="col-6">
-              <input type="text" class="form-control" name="discount_unit" id="discount_unit" placeholder="輸入折扣數值">
+            <label class="col-2 text-right"><span class="asterisk"> *</span>折扣數值</label>
+            <div class="col-6 input-group">
+              <input type="text" class="form-control" name="discount_unit" id="discount_unit"
+                placeholder="輸入折扣數值。例:9折、75折">
+              <div class="input-group-append">
+                <span class="input-group-text" id="discount_unit_suffix">折</span>
+              </div>
             </div>
           </div>
 
@@ -139,10 +143,27 @@ include __DIR__ . './_navbar.php';
       $('#discount_type').on('click blur', function() {
         let discount_type = $(this).val()
         if (discount_type == 'percentage') {
-          $('#discount_unit').attr('placeholder', '輸入折扣數值')
+          $('#discount_unit').attr('placeholder', '輸入折扣數值。例:9折、75折')
+          $('#discount_unit_suffix').text('折');
         } else if (discount_type == 'currency') {
-          $('#discount_unit').attr('placeholder', '輸入折抵金額')
+          $('#discount_unit').attr('placeholder', '輸入折抵金額。例:100元')
+          $('#discount_unit_suffix').text('元');
+
         }
+      })
+      $('#discount_unit').on('keyup blur change', function() {
+        let discount_unit = $('#discount_unit').val()
+
+        if (isNaN(Number(discount_unit))) {
+          info_bar.style.display = 'block';
+          info_bar.className = 'alert alert-danger';
+          info_bar.innerHTML = '請輸入數值';
+          $('#discount_unit').val('')
+          setTimeout(function() {
+            info_bar.style.display = 'none';
+          }, 3000);
+        }
+
       })
 
 
