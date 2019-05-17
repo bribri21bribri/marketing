@@ -61,7 +61,7 @@ include __DIR__ . './_navbar.php';
               <th scope="col">有效狀態</th>
               <th scope="col">使用者帳號</th>
               <th scope="col">操作</th>
-              <th scope="col"><input type="checkbox" id="checkAll"></th>
+              <!-- <th scope="col"><input type="checkbox" id="checkAll"></th> -->
             </tr>
           </thead>
           <tbody id="coupon_output">
@@ -273,17 +273,17 @@ include __DIR__ . './_navbar.php';
                 window.location = './coupon_gain_insert.php'
               },
             },
-            {
-              className: 'btn btn-info',
-              text: '多筆操作',
-              action: function(e, dt, node, config) {
+            // {
+            //   className: 'btn btn-info',
+            //   text: '多筆操作',
+            //   action: function(e, dt, node, config) {
 
-              },
-              attr: {
-                'data-toggle': 'modal',
-                'data-target': '#multi_switch_modal'
-              }
-            },
+            //   },
+            //   attr: {
+            //     'data-toggle': 'modal',
+            //     'data-target': '#multi_switch_modal'
+            //   }
+            // },
           ],
           "processing": true,
           "serverSide": true,
@@ -295,14 +295,15 @@ include __DIR__ . './_navbar.php';
               valid_condition: sql
             }
           },
-          "columnDefs": [{
-              "targets": [7],
-              "data": "gain_record_id",
-              "className": "checkbox_manipulation",
-              "render": function(data, type, row, meta) {
-                return "<input data-coupon_record_id=" + data + " type='checkbox'>";
-              }
-            },
+          "columnDefs": [
+            // {
+            //   "targets": [7],
+            //   "data": "gain_record_id",
+            //   "className": "checkbox_manipulation",
+            //   "render": function(data, type, row, meta) {
+            //     return "<input data-coupon_record_id=" + data + " type='checkbox'>";
+            //   }
+            // },
             {
               "targets": [6],
               "data": "gain_record_id",

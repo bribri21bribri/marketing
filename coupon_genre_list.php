@@ -49,7 +49,7 @@ include __DIR__ . './_navbar.php';
 
               <th scope="col">描述</th>
               <th scope="col">操作</th>
-              <th scope="col"><input type="checkbox" id="select_all"></th>
+              <!-- <th scope="col"><input type="checkbox" id="select_all"></th> -->
             </tr>
           </thead>
           <tbody id="coupon_output">
@@ -92,15 +92,16 @@ include __DIR__ . './_navbar.php';
               date_condition: sql
             }
           },
-          "columnDefs": [{
-              "targets": [11],
-              "data": "coupon_genre_id",
-              "render": function(data, type, row, meta) {
-                return "<input data-coupon_id=" + data + " type='checkbox'>";
-              }
-            },
+          "columnDefs": [
+            // {
+            //   "targets": [12],
+            //   "data": "coupon_genre_id",
+            //   "render": function(data, type, row, meta) {
+            //     return "<input data-coupon_id=" + data + " type='checkbox'>";
+            //   }
+            // },
             {
-              "targets": [12],
+              "targets": [11],
               "data": "coupon_genre_id",
               "render": function(data, type, row, meta) {
                 return '<a href="coupon_genre_edit.php?coupon_id=' + data +
